@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gun/nts.js"></script>
+    <script>
+      let gun = Gun('https://stonegun.herokuapp.com/gun')
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/easement.js@1.0.1/easement.min.js" > </script>
+    <script src="components/enemies.js"></script>
+    <script src="components/player.js"></script>
+  </head>
+  <body>
+    <a-scene vr-mode-ui="enabled: false">
+      <a-box id="player" player wasd-controls="acceleration: 60; adInverted: false; wsInverted: true; adAxis: z; wsAxis: x" position="-1 0.5 -3" rotation="0 0 0" color="#e9c46a"></a-box>
+      <a-entity id="enemies" enemies color="#e9c46a"></a-entity>
+      
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="400" height="400" color="#2a9d8f"></a-plane>
+      <a-sky color="#ECECEC"></a-sky>
+
+      <a-entity id="rig" position="0 20 0" rotation="-90 90 180">
+        <a-entity id="camera" camera spectator></a-entity>
+      </a-entity>
+      
+
+    </a-scene>
+  </body>
+</html>
