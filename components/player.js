@@ -17,7 +17,7 @@ AFRAME.registerComponent('player', {
        */
       tick: function (t, dt) {
       
-        gun.get('players').get( this.gunid ).put({...this.el.object3D.position,time:Gun.state()})
+        gun.get('players').get( this.gunid ).put({...this.el.object3D.position})
        // this.pPos = this.el.object3D.position;
       }
 });

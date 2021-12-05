@@ -39,15 +39,11 @@ AFRAME.registerComponent('enemies', {
    
     gun.get('players').map().on((data, id) => {
 
-      if (!data || !data.time) {
+      if (!data) {
         return;
         //don't include null players
       }
 
-      if (Gun.state() - data.time > 1000) {
-        return;
-        //don't include  players that sent stuff a while ago
-      }
 
       if (document.querySelector("#player").gunid == id) {
         return;
@@ -58,10 +54,10 @@ AFRAME.registerComponent('enemies', {
       if (!this.enemies[id]) this.enemies[id] = { position: new THREE.Vector3(data.x, data.y, data.z) };
 
       this.enemies[id].targetPosition = { x: data.x, y: data.y, z: data.z };
-      this.enemies[id].timeSent = data.time;
+
       this.enemies[id].timeRecieved = Gun.state();
-      this.enemies[id].lastUpdate = Gun.state();
-      // if(!this.enemies[id].x) this.enemies[id].x = this.enemies[id].newpos.x;
+ 
+     
 
     });
 
@@ -72,16 +68,14 @@ AFRAME.registerComponent('enemies', {
     this.mesh.count = Object.keys(this.enemies).length;
     let i = 0;
     for (let [id, data] of Object.entries(this.enemies)) {
-      if (Gun.state() - data.timeRecieved > 3000) {
+      if (Gun.state() - data.timeRecieved > 500) {
         //remove 
         this.remove(id);
         break;
       }
       
-      let dt2 = Gun.state() - (data.lastUpdate) ;
-      this.enemies[id].lastUpdate = Gun.state()
-      this.enemies[id].position.lerp(data.targetPosition, (dt2 / (100) ) );
-      
+      this.enemies[id].position.lerp(data.targetPosition, BezierBlend(0.15  ) );
+     
       this.dummy.position.copy(this.enemies[id].position);
 
       this.dummy.updateMatrix();

@@ -11,6 +11,7 @@
     <script src="components/player.js"></script>
   </head>
   <body>
+    
     <a-scene vr-mode-ui="enabled: false">
       <a-box id="player" player wasd-controls="acceleration: 60; adInverted: false; wsInverted: true; adAxis: z; wsAxis: x" position="-1 0.5 -3" rotation="0 0 0" color="#e9c46a"></a-box>
       <a-entity id="enemies" enemies color="#e76f51"></a-entity>
@@ -24,5 +25,8 @@
       <a-entity text="value: Hello, A-Frame!; color: #BBB" position="-0.9 0.2 -3" scale="1.5 1.5 1.5"></a-entity>
 
     </a-scene>
+    <div style="position:absolute; top:0px; left:0px; padding:20;z-index:1000;">
+      <button> teleport </button>
+  </div>
   </body>
 </html>
