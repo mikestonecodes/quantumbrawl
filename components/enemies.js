@@ -1,100 +1,101 @@
+
+function BezierBlend(t) {
+  return t * t * (3.0 - 2.0 * t);
+}
+
 AFRAME.registerComponent('enemies', {
   schema: {
-    color: {type: 'color', default: '#AAA'}
+    color: { type: 'color', default: '#e76f51' }
   },
-  init:function(){
+  init: function () {
     this.enemies = []
-    this.smoothTime = 0;
   },
-  remove: function(id){
-    if(id && this.enemies[id] ){
-       if(this.enemies[id].entity) sceneEl.removeChild(this.enemies[id].entity);
-       this.enemies = this.enemies.filter((i)=>i!=id);   
-        
-        gun.get('players').get(id).put(null);
-      }
+
+  remove: function (id) {
+    if (id && this.enemies[id]) {
+      if (this.enemies[id].entity) sceneEl.removeChild(this.enemies[id].entity);
+      this.enemies = this.enemies.filter((i) => i != id);
+      gun.get('players').get(id).put(null);
+    }
   },
+
   update: function () {
     this.el.smoothTime = 0;
     this.el.newPosition = { x: 0, z: 0 }
     window.enemies = [];
     let data = this.data;
-    
+
     this.geometry = new THREE.BoxBufferGeometry(1, 1, 1);
 
     // Create material.
-    this.material = new THREE.MeshStandardMaterial({color: data.color});
+    this.material = new THREE.MeshStandardMaterial({ color: data.color });
 
     // Create mesh.
-    this.mesh = new THREE.InstancedMesh(this.geometry, this.material,1000);
-    this.mesh.instanceMatrix.setUsage( THREE.DynamicDrawUsage );
-    this.el.setObject3D('mesh',this.mesh)
+    this.mesh = new THREE.InstancedMesh(this.geometry, this.material, 1000);
+    this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this.el.setObject3D('mesh', this.mesh)
 
     this.dummy = new THREE.Object3D();
+   
+    gun.get('players').map().on((data, id) => {
 
-    gun.get('players').map().on((data, id) =>{
-      
-      if(!data || !data.time){
+      if (!data || !data.time) {
         return;
-      }
-      
-      if (Date.now() - data.time > 1000) {
-        return;
+        //don't include null players
       }
 
-      if(document.querySelector("#player").gunid==id){
+      if (Gun.state() - data.time > 500) {
         return;
+        //don't include  players that sent stuff a while ago
       }
 
-      let newpos = {x:data.x,y:data.y,z:data.z};
-      this.enemies[id] = {newpos,time:Date.now()};
+      if (document.querySelector("#player").gunid == id) {
+        return;
+        //don't include yourself
+      }
+
+
+      if (!this.enemies[id]) this.enemies[id] = { position: new THREE.Vector3(data.x, data.y, data.z) };
+
+      this.enemies[id].targetPosition = { x: data.x, y: data.y, z: data.z };
+      this.enemies[id].timeSent = data.time;
+      this.enemies[id].timeRecieved = Gun.state();
+      this.enemies[id].lastUpdate = Gun.state();
+      // if(!this.enemies[id].x) this.enemies[id].x = this.enemies[id].newpos.x;
 
     });
 
   },
+
   tick: function (t, dt) {
+
     this.mesh.count = Object.keys(this.enemies).length;
     let i = 0;
-    for(let [id,data] of Object.entries(this.enemies)){
-      if (Date.now() -data.time > 500) {
+    for (let [id, data] of Object.entries(this.enemies)) {
+      if (Gun.state() - data.timeRecieved > 2000) {
+        //remove 
         this.remove(id);
-        return;
+        break;
       }
-      
-      if(!this.enemies[id].x)this.enemies[id].x = this.enemies[id].newpos.x;
-      if(!this.enemies[id].z)this.enemies[id].z = this.enemies[id].newpos.z;
-      let vx = easement.ease('easeOutQuart', this.smoothTime, {
-        endTime: this.smoothTime + 700,
-        startValue:this.enemies[id].x   ,
-        endValue: this.enemies[id].newpos.x
-      })
+
+      let delta =  (Gun.state()   -  this.enemies[id].lastUpdate ) ;
+      this.enemies[id].lastUpdate = Gun.state();
+      delta /= 100;
 
      
-      let vz = easement.ease('easeOutQuart', this.smoothTime, {
-        endTime: this.smoothTime + 434,
-        startValue:  this.enemies[id].z   ,
-        endValue: this.enemies[id].newpos.z 
-      })
-      this.enemies[id].x = vx;
-      this.enemies[id].z = vz;
-      this.dummy.position.set(this.enemies[id].x,0.5,this.enemies[id].z);
+      
+      this.enemies[id].position.lerp(this.enemies[id].targetPosition, BezierBlend(delta) );
+
+      this.dummy.position.set(this.enemies[id].position.x, this.enemies[id].position.y, this.enemies[id].position.z);
 
       this.dummy.updateMatrix();
-			this.mesh.setMatrixAt( i ++, this.dummy.matrix );
-   
+
+      this.mesh.setMatrixAt(i++, this.dummy.matrix);
+
+      this.enemies[id].pTime = Gun.state();
+
     }
     this.mesh.instanceMatrix.needsUpdate = true;
-
-    this.smoothTime+=0.1;
-
-   /* if (!this.el.newPosition.x || !this.el.object3D.position || !this.el.object3D.position.x) return;
-   
-
-    this.el.object3D.position.set(vx, 0.5, vz)
-
-   
-
-   */
 
   }
 });
