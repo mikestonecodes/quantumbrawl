@@ -44,7 +44,7 @@ AFRAME.registerComponent('enemies', {
         //don't include null players
       }
 
-      if (Gun.state() - data.time > 500) {
+      if (Gun.state() - data.time > 1000) {
         return;
         //don't include  players that sent stuff a while ago
       }
@@ -66,27 +66,23 @@ AFRAME.registerComponent('enemies', {
     });
 
   },
-
+  
   tick: function (t, dt) {
 
     this.mesh.count = Object.keys(this.enemies).length;
     let i = 0;
     for (let [id, data] of Object.entries(this.enemies)) {
-      if (Gun.state() - data.timeRecieved > 2000) {
+      if (Gun.state() - data.timeRecieved > 3000) {
         //remove 
         this.remove(id);
         break;
       }
-
-      let delta =  (Gun.state()   -  this.enemies[id].lastUpdate ) ;
-      this.enemies[id].lastUpdate = Gun.state();
-      delta /= 100;
-
-     
       
-      this.enemies[id].position.lerp(this.enemies[id].targetPosition, BezierBlend(delta) );
-
-      this.dummy.position.set(this.enemies[id].position.x, this.enemies[id].position.y, this.enemies[id].position.z);
+      let dt2 = Gun.state() - (data.lastUpdate) ;
+      this.enemies[id].lastUpdate = Gun.state()
+      this.enemies[id].position.lerp(data.targetPosition, (dt2 / (100) ) );
+      
+      this.dummy.position.copy(this.enemies[id].position);
 
       this.dummy.updateMatrix();
 

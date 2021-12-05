@@ -3,7 +3,7 @@ AFRAME.registerComponent('player', {
         // Set up the tick throttling.
         this.tick = AFRAME.utils.throttleTick(this.tick, 100, this);
        
-        this.gunid =  Gun.text.random(5,"abcdefghijk");
+        this.gunid =  Gun.text.random(5,"abcdefghijklmnopqrstuvwxyz");
 
 
      //   this.pPos = this.el.object3D.position;
