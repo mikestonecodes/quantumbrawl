@@ -14,7 +14,9 @@ AFRAME.registerComponent('player', {
 
         document.getElementById("teleportButton").addEventListener("click", ()=>{
           let ng = Math.random() > .5?-1:1;
-          this.el.object3D.position.set(5+Math.random()*10*ng,0.5,5+Math.random()*10*ng);
+
+          let rnd = (5+Math.random()*10)*ng
+          this.el.object3D.position.set(rnd,0.5,rnd);
         });
 
       },
