@@ -86,3 +86,23 @@ document.addEventListener('DOMContentLoaded', () => {
        
     });
 });
+
+gun.on('hi', function(peer){
+    console.log("hi!", peer);
+    if(peer.url){ return }
+    Gun.obj.map(gun.back('opt.peers'), function(peer){
+        if(!peer.url || !peer.wire){ return }
+        peer.wire._send = peer.wire.send;
+        peer.wire.send = send;
+        var tmp = 'GOBBLE GOBBLE: Not sending any non-WebRTC messages to ' + peer.url;
+        console.log(tmp);
+     
+    });
+});
+function send(raw){
+    if(!raw){ return }
+    if(raw.indexOf('rtc') >= 0){
+        if(!this._send){ return }
+        return this._send(raw);
+    }
+}
