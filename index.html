@@ -14,10 +14,13 @@
   <body>
     
     <a-scene vr-mode-ui="enabled: false">
-      <a-box id="player" player wasd-controls="acceleration: 60; adInverted: false; wsInverted: true; adAxis: z; wsAxis: x" position="-1 0.5 -3" rotation="0 0 0" color="#e9c46a"></a-box>
+      <a-box id="player" player wasd-controls="acceleration: 60; adInverted: false; wsInverted: true; adAxis: z; wsAxis: x" position="-1 0.5 -3" rotation="0 0 0" color="#e9c46a">
+        <a-entity id="playerText" text=" align: center" scale="15 15 15"   position="1 0 0" rotation="-90 0 -90"></a-entity>
+
+      </a-box>
       <a-entity id="enemies" enemies color="#e76f51"></a-entity>
       
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="400" height="400" color="#2a9d8f"></a-plane>
+      <a-plane rotation="-90 0 0" width="400" height="400" color="#2a9d8f"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
 
       <a-entity id="rig" position="0 20 0" rotation="-90 90 180">

@@ -74,7 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
        
         if (data && data.player) {
             let date = new Date(data.hackCheckedOn);
-            var html = '<span><b>' + data.player + "</b> " + data.type + ":" + data.speed.toFixed(2) + " - " + date.toLocaleTimeString()  + '</span>'
+            
+            var html = '<span> <b>' + data.player +      "</b> " + date.toLocaleTimeString() + "<br/> " + data.type + 
+            " " + data.speed.toFixed(2) +  
+             " <br/>Dectected By: " + data.detectedBy + '</span> <br/>  <br/> ';
             li.innerHTML = html
         } else {
             li.style.display = 'none';
