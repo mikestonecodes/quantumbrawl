@@ -1,3 +1,4 @@
+
 AFRAME.registerComponent('player', {
     init: function () {
         // Set up the tick throttling.
@@ -10,8 +11,13 @@ AFRAME.registerComponent('player', {
         console.log("my gun ID", this.gunid);
         this.el.gunid = this.gunid;
         this.lpos = this.el.object3D.position;
+
+        document.getElementById("teleportButton").addEventListener("click", ()=>{
+          let ng = Math.random() > .5?-1:1;
+          this.el.object3D.position.set(5+Math.random()*10*ng,0.5,5+Math.random()*10*ng);
+        });
+
       },
-    
       /**
        * Tick function that will be wrapped to be throttled.
        */

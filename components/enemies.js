@@ -50,14 +50,18 @@ AFRAME.registerComponent('enemies', {
         //don't include yourself
       }
 
-
-      if (!this.enemies[id]) this.enemies[id] = { position: new THREE.Vector3(data.x, data.y, data.z) };
+      if (!this.enemies[id]) this.enemies[id] = { position: new THREE.Vector3().copy(data) };
 
       this.enemies[id].targetPosition = { x: data.x, y: data.y, z: data.z };
+      this.enemies[id].timeRecieved = Gun.state();      
 
-      this.enemies[id].timeRecieved = Gun.state();
- 
-     
+      gameState.add(
+        {
+          id,
+          targetPosition:this.enemies[id].targetPosition,
+          timeRecieved:this.enemies[id].timeRecieved,
+        }
+      );
 
     });
 
@@ -74,7 +78,7 @@ AFRAME.registerComponent('enemies', {
         break;
       }
       
-      this.enemies[id].position.lerp(data.targetPosition, BezierBlend(0.15  ) );
+      this.enemies[id].position.lerp(data.targetPosition, BezierBlend(0.18  ) );
      
       this.dummy.position.copy(this.enemies[id].position);
 
