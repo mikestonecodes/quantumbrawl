@@ -1,4 +1,5 @@
 
+
 function BezierBlend(t) {
   return t * t * (3.0 - 2.0 * t);
 }
@@ -54,7 +55,7 @@ AFRAME.registerComponent('enemies', {
 
       this.enemies[id].targetPosition = { x: data.x, y: data.y, z: data.z };
       this.enemies[id].timeRecieved = Gun.state();      
-
+      
       gameState.add(
         {
           id,

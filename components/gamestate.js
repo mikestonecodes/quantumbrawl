@@ -30,7 +30,7 @@ class gameState {
 
             vec1.copy(checkState.targetPosition);
             vec2.copy(previous.lsTargetPos);
-
+            
             var timeDiff = checkState.timeRecieved - previous.lsTimeRecieved;
 
             var speed = vec2.sub(vec1).divideScalar(timeDiff).length();
@@ -52,37 +52,10 @@ class gameState {
 document.addEventListener('DOMContentLoaded', () => {
     let totalAdded = 0;
     gun.get('hacks').map().on((data, id) => {
-
-        
-        var li = document.getElementById(id);
-        var list = document.getElementById('hacks')
-
-        if (!(typeof (li) != "undefined" && li != null)) {
-            li = document.createElement('li');
-            li.id = id;
-            list.prepend(li);
-            totalAdded++;
-
-            if(totalAdded > 5){
-                var els = document.getElementsByTagName("li");
-                var removeEl = els[els.length - 1];            // <-- fetching last el
-                var containerEl = removeEl.parentNode;
-                containerEl.removeChild(removeEl);
-            }
-    
-        }
        
         if (data && data.player) {
-            let date = new Date(data.hackCheckedOn);
-            
-            var html = '<span> <b>' + data.player +      "</b> " + date.toLocaleTimeString() + "<br/> " + data.type + 
-            " " + data.speed.toFixed(2) +  
-             " <br/>Dectected By: " + data.detectedBy + '</span> <br/>  <br/> ';
-            li.innerHTML = html
-        } else {
-            li.style.display = 'none';
-        }
-
+          console.log("HACK",data)
+        } 
        
     });
 });

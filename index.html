@@ -1,16 +1,19 @@
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+
+    <script src="npm:aframe"></script>
     <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gun/nts.js"></script>
-    
+
     <script>
       let gun = Gun('https://stonegun.herokuapp.com/gun')
     </script>
+
     <script src="components/gamestate.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/easement.js@1.0.1/easement.min.js" > </script>
     <script src="components/enemies.js"></script>
     <script src="components/player.js"></script>
+    <script  type="module" src="components/mint.js"></script>
+
+    
   </head>
   <body>
     
