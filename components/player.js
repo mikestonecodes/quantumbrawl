@@ -2,7 +2,7 @@
 AFRAME.registerComponent('player', {
     init: function () {
         // Set up the tick throttling.
-        this.tick = AFRAME.utils.throttleTick(this.tick, 1500, this);
+        this.tick = AFRAME.utils.throttleTick(this.tick, 100, this);
        
         this.gunid =  Gun.text.random(5,"abcdefghijklmnopqrstuvwxyz");
 
